@@ -1,0 +1,69 @@
+MongoDB shell version v4.4.4
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("6dad69b6-1276-408b-86cf-b6e2a044e48f") }
+MongoDB server version: 4.4.4
+
+> use Students
+switched to db Students
+> db.Students.insertOne({"rollno":1, "name":"chiru", "age":21, "contactNo":"6473648343", "emailId":"chiru@gmail.com"})
+{
+	"acknowledged" : true,
+	"insertedId" : ObjectId("606989d8e23189fe0bdfef9f")
+}
+> db.Students.insertOne({"rollno":10, "name":"hemanth", "age":21, "contactNo":"6473648143", "emailId":"hamanth@gmail.com"})
+{
+	"acknowledged" : true,
+	"insertedId" : ObjectId("60698a9be23189fe0bdfefa0")
+}
+> db.Students.insertOne({"rollno":11, "name":"chirag", "age":20, "contactNo":"6473648142", "emailId":"chirag@gmail.com"})
+{
+	"acknowledged" : true,
+	"insertedId" : ObjectId("60698ad6e23189fe0bdfefa1")
+}
+> db.Students.find()
+{ "_id" : ObjectId("606989d8e23189fe0bdfef9f"), "rollno" : 1, "name" : "chiru", "age" : 21, "contactNo" : "6473648343", "emailId" : "chiru@gmail.com" }
+{ "_id" : ObjectId("60698a9be23189fe0bdfefa0"), "rollno" : 10, "name" : "hemanth", "age" : 21, "contactNo" : "6473648143", "emailId" : "hemanth@gmail.com" }
+{ "_id" : ObjectId("60698ad6e23189fe0bdfefa1"), "rollno" : 11, "name" : "chirag", "age" : 20, "contactNo" : "6473648142", "emailId" : "chirag@gmail.com" }
+
+> db.Students.update({"rollno":10}, { $set : { emailId : "abhi@gmail.com" }})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> 
+
+> db.Students.find()
+{ "_id" : ObjectId("606989d8e23189fe0bdfef9f"), "rollno" : 1, "name" : "chiru", "age" : 21, "contactNo" : "6473648343", "emailId" : "chiru@gmail.com" }
+{ "_id" : ObjectId("60698a9be23189fe0bdfefa0"), "rollno" : 10, "name" : "hemanth", "age" : 21, "contactNo" : "6473648143", "emailId" : "abhi@gmail.com" }
+{ "_id" : ObjectId("60698ad6e23189fe0bdfefa1"), "rollno" : 11, "name" : "chirag", "age" : 20, "contactNo" : "6473648142", "emailId" : "chirag@gmail.com" }
+
+> db.Students.update({"rollno":11}, { $set : { name : "muni" }})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.Students.find()
+{ "_id" : ObjectId("606989d8e23189fe0bdfef9f"), "rollno" : 1, "name" : "chiru", "age" : 21, "contactNo" : "6473648343", "emailId" : "chiru@gmail.com" }
+{ "_id" : ObjectId("60698a9be23189fe0bdfefa0"), "rollno" : 10, "name" : "hemanth", "age" : 21, "contactNo" : "6473648143", "emailId" : "abhi@gmail.com" }
+{ "_id" : ObjectId("60698ad6e23189fe0bdfefa1"), "rollno" : 11, "name" : "muni", "age" : 20, "contactNo" : "6473648142", "emailId" : "chirag@gmail.com" }
+
+$	mongoexport --collection=Students --db=Students --out=output.csv --type=csv --fields="rollno,name,contactNo,emailId"
+	2021-04-04T16:50:11.578+0530	connected to: mongodb://localhost/
+	2021-04-04T16:50:11.582+0530	exported 3 records
+
+> db.Students.drop()
+true
+
+$ 	mongoimport --collection=Students --db=StudentsImport --file=output.csv --type=csv --headerline
+	2021-04-04T16:58:55.797+0530	connected to: mongodb://localhost/
+	2021-04-04T16:58:55.811+0530	3 document(s) imported successfully. 0 document(s) failed to import.
+
+> use StudentsImport
+switched to db StudentsImport
+
+> db
+StudentsImport
+
+> show collections
+Students
+
+> db.Students.find()
+{ "_id" : ObjectId("60698a9be23189fe0bdfefa0"), "rollno" : 10, "name" : "hemanth", "age" : 21, "contactNo" : "6473648143", "emailId" : "abhi@gmail.com" }
+{ "_id" : ObjectId("60698ad6e23189fe0bdfefa1"), "rollno" : 11, "name" : "muni", "age" : 20, "contactNo" : "6473648142", "emailId" : "chirag@gmail.com" }
+{ "_id" : ObjectId("606989d8e23189fe0bdfef9f"), "rollno" : 1, "name" : "chiru", "age" : 21, "contactNo" : "6473648343", "emailId" : "chiru@gmail.com" }
+>
